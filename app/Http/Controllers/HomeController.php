@@ -13,6 +13,24 @@ class HomeController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
+    public function adminIndex() {
+        $faq = \App\Question::where('q_status',1)->get();
+        return view('admin.index',array('faqs'=> $faq));
+    }
+
+    public function addFaq() {
+        $ans = \App\Answer::create(array(
+                    'answer' => \Request::get('answer')
+        ));
+        \App\Question::create(array(
+            'question' => \Request::get('question'),
+            'answer_id' => $ans->id
+        ));
+
+        return redirect('/admin')
+                        ->with('global', '<div class="alert alert-success" align="center">Question successfully submitted</div>');
+    }
+
     public function getQuestion() {
         $name = \Request::input('term');
         $search = \App\Question::whereRaw("MATCH(question) AGAINST(? IN NATURAL LANGUAGE MODE)", array($name))->take(10)->get();

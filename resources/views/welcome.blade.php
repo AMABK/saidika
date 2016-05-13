@@ -30,12 +30,13 @@
                     @endif
                     <div id="answer" class="panel panel-default" style="padding: 5px;display: none;  background: #E3E3E3"></div>
                     <div id="addQuiz" class="panel panel-default" style="padding: 5px;display: none; padding-bottom: 35px ">
-                        <form action="/add-question" method="post">
+<!--                        <form action="/add-question" method="post">
                             {!!csrf_field()!!}
                             <h3>Please enter the question below</h3>
                             <textarea class="form-control" name="question" required="" placeholder="Enter your question"></textarea>
                             <input type="submit" class="btn btn-warning" style="float: right" value="Submit question">
-                        </form>
+                        </form>-->
+<a href="http://optimuse-solutions.com" target="_blank">Click here to submit a ticket</a>
                     </div>
                     <div class="faqHeader">General questions</div>
                     <div class="panel panel-default">
