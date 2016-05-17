@@ -20,7 +20,7 @@ Administrator
                         </ul>
 
                         <div class="tab-content">
-                            <div id="home" class="tab-pane fade in active">
+                            <div id="home" class="tab-pane fade">
                                 <div class="col-lg-12">
                                     <form action="/add-faq" method="post" enctype="multipart/form-data">
                                         {!! csrf_field() !!}
@@ -34,7 +34,7 @@ Administrator
                                     </form>
                                 </div>
                             </div>
-                            <div id="menu2" class="tab-pane fade">
+                            <div id="menu2" class="tab-pane fade in active">
                                 <form action="/admin" method="post">
                                     {!!csrf_field()!!}
                                     <span class="col-md-3">Question
