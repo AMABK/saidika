@@ -15,8 +15,8 @@ Administrator
                     @endif
                     <div class="row">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-                            <li><a data-toggle="tab" href="#menu2">FAQs</a></li>
+                            <li class="active"><a data-toggle="tab" href="#menu2">FAQs</a></li>
+                            <li ><a data-toggle="tab" href="#home">Add FAQs</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -36,19 +36,19 @@ Administrator
                             </div>
                             <div id="menu2" class="tab-pane fade">
                                 <form action="/admin" method="post">
-                                            {!!csrf_field()!!}
-                                            <span class="col-md-3">Question
-                                                <input type="text" name="question" class="form-control">
-                                            </span>
-                                            <span class="col-md-3">Status
-                                                <select class="form-control" name="status">
-                                                    <option value="1">Active</option>
-                                                    <option value="2">In Active</option>
-                                                </select>
-                                            </span>
-                                            <span class="col-md-2">Action
-                                                <input type="submit"  class="form-control btn-warning" value="search"><br>
-                                            </span>
+                                    {!!csrf_field()!!}
+                                    <span class="col-md-3">Question
+                                        <input type="text" name="question" class="form-control">
+                                    </span>
+                                    <span class="col-md-3">Status
+                                        <select class="form-control" name="status">
+                                            <option value="1">Active</option>
+                                            <option value="2">In Active</option>
+                                        </select>
+                                    </span>
+                                    <span class="col-md-2">Action
+                                        <input type="submit"  class="form-control btn-warning" value="search"><br>
+                                    </span>
                                 </form><br>
                                 <h4>Search FAQs in the DB</h4><br>
                                 @foreach($faqs as $faq)
