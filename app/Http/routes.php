@@ -43,8 +43,16 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'admin',
         'uses' => 'HomeController@adminIndex'
     ));
+    Route::post('/admin', array(
+        'as' => 'admin',
+        'uses' => 'HomeController@adminIndex'
+    ));
     Route::post('/add-faq', array(
         'as' => 'add-faq',
         'uses' => 'HomeController@addFaq'
+    ));
+    Route::post('/update-faq', array(
+        'as' => 'update-faq',
+        'uses' => 'HomeController@updateFaq'
     ));
 });

@@ -14,8 +14,24 @@ class HomeController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function adminIndex() {
-        $faq = \App\Question::where('q_status',1)->get();
-        return view('admin.index',array('faqs'=> $faq));
+        $query = \App\Question::whereNotNull('created_at');
+        //Search by question
+        $question = \Request::get('question');
+        if ($question && !empty($question)) {
+            $query->where('question', 'LIKE', '%' . $question . '%');
+        }
+        //Search by question
+        $status = \Request::get('status');
+        if ($status && !empty($status)) {
+            if ($status == 2) {
+                $status = 0;
+            }
+            $query->where('q_status', $status);
+        } else {
+            $query->where('q_status', 1);
+        }
+        $faq = $query->paginate(10);
+        return view('admin.index', array('faqs' => $faq));
     }
 
     public function addFaq() {
@@ -29,6 +45,22 @@ class HomeController extends Controller {
 
         return redirect('/admin')
                         ->with('global', '<div class="alert alert-success" align="center">Question successfully submitted</div>');
+    }
+
+    public function updateFaq() {
+        \App\Question::find(\Request::get('q_id'))
+                ->update(array(
+                    'question' => \Request::get('question'),
+                    'q_status' => \Request::get('status')
+                        )
+        );
+        \App\Answer::find(\Request::get('a_id'))
+                ->update(array(
+                    'answer' => \Request::get('answer'),
+                        )
+        );
+        return redirect()->back()
+                        ->with('global', '<div class="alert alert-success" align="center">FAQ successfully updated</div>');
     }
 
     public function getQuestion() {

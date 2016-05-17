@@ -35,8 +35,56 @@ Administrator
                                 </div>
                             </div>
                             <div id="menu2" class="tab-pane fade">
-                                <h3>FAQs</h3>
+                                <form action="/admin" method="post">
+                                            {!!csrf_field()!!}
+                                            <span class="col-md-3">Question
+                                                <input type="text" name="question" class="form-control">
+                                            </span>
+                                            <span class="col-md-3">Status
+                                                <select class="form-control" name="status">
+                                                    <option value="1">Active</option>
+                                                    <option value="2">In Active</option>
+                                                </select>
+                                            </span>
+                                            <span class="col-md-2">Action
+                                                <input type="submit"  class="form-control btn-warning" value="search"><br>
+                                            </span>
+                                </form><br>
+                                <h4>Search FAQs in the DB</h4><br>
                                 @foreach($faqs as $faq)
+                                <!-- Modal -->
+                                <div id="myModal-{{$faq->id}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <form action="/update-faq" method="post">
+                                            {!!csrf_field()!!}
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Edit FAQ</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <label for="">Question</label>
+                                                    <input type="hidden" name="q_id" value="{{$faq->id}}">
+                                                    <textarea required="" name="question" placeholder="Enter question here..." class="form-control" rows="3">{{$faq->question}}</textarea>
+                                                    <label for="">Answer</label> 
+                                                    <input type="hidden" name="a_id" value="{{$faq->answer['id']}}">
+                                                    <textarea required="" name="answer" placeholder="Enter answer here..." class="form-control" rows="3">{{$faq->answer['answer']}}</textarea>
+                                                    <label for="">FAQ Status</label> 
+                                                    <select name="status" class="form-control">
+                                                        <option value="1" class="form-control">Active</option>
+                                                        <option value="0" class="form-control">In Active</option>
+                                                    </select>
+                                                    <input type="submit" class="btn btn-warning" value="Update">
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
@@ -46,10 +94,12 @@ Administrator
                                     <div id="collapse{{$faq->id}}" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             {{$faq->answer['answer']}}
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal-{{$faq->id}}">Edit</button>
                                         </div>
                                     </div>
                                 </div>
                                 @endforeach
+                                {!! $faqs->render() !!}
                             </div>
                         </div>
                     </div>
@@ -89,102 +139,6 @@ Administrator
         $("#email").autocomplete(user_details);
 
     });
-    //ge
-    $(document).ready(function () {
-        var titleValidators = {
-            row: '.col-xs-4', // The title is placed inside a <div class="col-xs-4"> element
-            validators: {
-                notEmpty: {
-                    message: 'The title is required'
-                }
-            }
-        },
-        isbnValidators = {
-            row: '.col-xs-4',
-            validators: {
-                notEmpty: {
-                    message: 'The ISBN is required'
-                },
-                isbn: {
-                    message: 'The ISBN is not valid'
-                }
-            }
-        },
-        priceValidators = {
-            row: '.col-xs-2',
-            validators: {
-                notEmpty: {
-                    message: 'The price is required'
-                },
-                numeric: {
-                    message: 'The price must be a numeric number'
-                }
-            }
-        },
-        bookIndex = 0;
 
-        $('#bookForm')
-                .formValidation({
-                    framework: 'bootstrap',
-                    icon: {
-                        valid: 'glyphicon glyphicon-ok',
-                        invalid: 'glyphicon glyphicon-remove',
-                        validating: 'glyphicon glyphicon-refresh'
-                    },
-                    fields: {
-                        'test[0].quiz': titleValidators,
-                        'test[0].ans1': isbnValidators,
-                        'test[0].ans2': priceValidators,
-                        'test[0].ans3': priceValidators,
-                        'test[0].ans4': priceValidators
-                    }
-                })
-
-                // Add button click handler
-                .on('click', '.addButton', function () {
-                    bookIndex++;
-                    var $template = $('#bookTemplate'),
-                            $clone = $template
-                            .clone()
-                            .removeClass('hide')
-                            .removeAttr('id')
-                            .attr('data-book-index', bookIndex)
-                            .insertBefore($template);
-
-                    // Update the name attributes
-                    $clone
-                            .find('[name="quiz"]').attr('name', 'test[' + bookIndex + '].quiz').end()
-                            .find('[name="ans1"]').attr('name', 'test[' + bookIndex + '].ans1').end()
-                            .find('[name="ans2"]').attr('name', 'test[' + bookIndex + '].ans2').end()
-                            .find('[name="ans3"]').attr('name', 'test[' + bookIndex + '].ans3').end()
-                            .find('[name="ans4"]').attr('name', 'test[' + bookIndex + '].ans4').end();
-
-                    // Add new fields
-                    // Note that we also pass the validator rules for new field as the third parameter
-                    $('#bookForm')
-                            .formValidation('addField', 'test[' + bookIndex + '].quiz', titleValidators)
-                            .formValidation('addField', 'test[' + bookIndex + '].ans1', isbnValidators)
-                            .formValidation('addField', 'test[' + bookIndex + '].ans2', priceValidators)
-                            .formValidation('addField', 'test[' + bookIndex + '].ans3', priceValidators)
-                            .formValidation('addField', 'test[' + bookIndex + '].ans4', priceValidators);
-                })
-
-                // Remove button click handler
-                .on('click', '.removeButton', function () {
-                    var $row = $(this).parents('.form-group'),
-                            index = $row.attr('data-book-index');
-
-                    // Remove fields
-                    $('#bookForm')
-                            .formValidation('removeField', $row.find('[name="test[' + index + '].quiz"]'))
-                            .formValidation('removeField', $row.find('[name="test[' + index + '].ans1"]'))
-                            .formValidation('removeField', $row.find('[name="test[' + index + '].ans2"]'))
-                            .formValidation('removeField', $row.find('[name="test[' + index + '].ans3"]'))
-                            .formValidation('removeField', $row.find('[name="test[' + index + '].ans4"]'));
-
-                    // Remove element containing the fields
-                    $row.remove();
-                });
-    });
 </script>   
 @stop
